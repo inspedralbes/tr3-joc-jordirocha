@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_db_users
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: gameserver
+      MYSQL_USER: joc_user
+      MYSQL_PASSWORD: joc_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+
+  users-api:
+    build: 
+      # Apunta cap al directori del microservei
+      context: ./backend/users-microservice 
+    container_name: users_microservice
+    restart: always
+    environment:
+      - PORT=3000
+      # Substitueix al server.js enviant aquesta info al db local (veure depends on i host 'db')
+      - DATABASE_URL=mysql://joc_user:joc_pass@db:3306/gameserver
+      - JWT_SECRET=clauSuperSecretaJocMultijugador123
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+
+volumes:
+  mysqldata:
