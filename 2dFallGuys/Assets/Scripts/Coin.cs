@@ -6,19 +6,16 @@ using UnityEngine;
 /// </summary>
 public class Coin : MonoBehaviour
 {
-    // Comptador global estàtic de punts per a tot el joc
-    public static int puntsTotals = 0;
-
     private void OnTriggerEnter2D(Collider2D altre)
     {
         // Comprovem si ha estat el jugador qui ha tocat la moneda
         if (altre.CompareTag("Player"))
         {
-            // Sumem punts al comptador global
-            puntsTotals += 10;
-            Debug.Log("[Coin] Moneda recollida! Punts actuals: " + puntsTotals);
-            
-            // Aquí es podria afegir un efecte visual o de so abans de destruir l'objecte
+            // Sumem punts via l'ScoreManager si existeix
+            if (ScoreManager.Instance != null)
+            {
+                ScoreManager.Instance.RecollirMoneda(10);
+            }
             
             // Destruïm l'objecte moneda perquè desaparegui de l'escena
             Destroy(gameObject);

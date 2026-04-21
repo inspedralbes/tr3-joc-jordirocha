@@ -48,16 +48,18 @@ public class Goal : MonoBehaviour
         // Marquem el nivell com a completat per no executar-ho dues vegades
         nivellCompletat = true;
 
-        Debug.Log("[Goal] " + missatgeVictoria);
+        Debug.Log("[Goal] Atleta ha arribat a la meta!");
 
-        // Mostrem el text de la UI si existeix
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.OnPlayerReachedFinish();
+        }
+
+        // Mostrem el text de la UI si existeix (Mecànica Original, si vols donar info passiu)
         if (textNivellCompletat != null)
         {
             textNivellCompletat.gameObject.SetActive(true);
             textNivellCompletat.text = missatgeVictoria;
         }
-
-        // Opcionalment, aturem el temps del joc per celebrar
-        Time.timeScale = 0f;
     }
 }

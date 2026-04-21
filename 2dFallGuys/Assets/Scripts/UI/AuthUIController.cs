@@ -11,6 +11,9 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class AuthUIController : MonoBehaviour
 {
+    // Variable global persistent per retenir el nom original (Sessió de jugador)
+    public static string LoggedInUsername = "";
+
     private UIDocument uiDocument;
 
     // Panells
@@ -32,8 +35,8 @@ public class AuthUIController : MonoBehaviour
     private readonly string baseUrl = "http://localhost:3000/api/users";
 
     [Header("Configuració")]
-    [Tooltip("El nom de l'escena a la que vols que vagi un cop es logegi/registri. Ex: 'SampleScene'")]
-    public string targetGameScene = "SampleScene";
+    [Tooltip("El nom de l'escena a la que vols que vagi un cop es logegi/registri. Ex: 'LobbyScene'")]
+    public string targetGameScene = "LobbyScene";
 
     [System.Serializable]
     private class AuthRequest
@@ -113,7 +116,7 @@ public class AuthUIController : MonoBehaviour
 
         // Serialització utilitzant la classe JsonUtility pròpia de Unity
         string jsonPayload = JsonUtility.ToJson(new AuthRequest { username = user, password = pass });
-        StartCoroutine(SendAuthRequest(baseUrl + "/login", jsonPayload, loginErrorLabel));
+        StartCoroutine(SendAuthRequest(baseUrl + "/login", jsonPayload, loginErrorLabel, user));
     }
 
     private void OnRegisterClicked()
@@ -130,7 +133,7 @@ public class AuthUIController : MonoBehaviour
         }
 
         string jsonPayload = JsonUtility.ToJson(new AuthRequest { username = user, email = email, password = pass });
-        StartCoroutine(SendAuthRequest(baseUrl + "/register", jsonPayload, registerErrorLabel));
+        StartCoroutine(SendAuthRequest(baseUrl + "/register", jsonPayload, registerErrorLabel, user));
     }
 
     private void ShowError(Label errorLabel, string msg)
@@ -139,7 +142,7 @@ public class AuthUIController : MonoBehaviour
         errorLabel.style.display = DisplayStyle.Flex;
     }
 
-    private IEnumerator SendAuthRequest(string url, string jsonPayload, Label errorLabel)
+    private IEnumerator SendAuthRequest(string url, string jsonPayload, Label errorLabel, string submittedUsername)
     {
         using (UnityWebRequest www = new UnityWebRequest(url, "POST"))
         {
@@ -165,8 +168,11 @@ public class AuthUIController : MonoBehaviour
                         ShowError(errorLabel, "Accés autoritzat! (veure consola)");
                         errorLabel.style.color = new StyleColor(Color.green);
                         
-                        // Carreguem l'escena principal programada per la variable targetGameScene
-                        SceneManager.LoadScene(targetGameScene);
+                        // Retenim el nom d'usuari a l'àmbit global
+                        LoggedInUsername = submittedUsername;
+                        
+                        // Carreguem l'escena principal (LobbyScene)
+                        SceneManager.LoadScene("LobbyScene");
                     }
                     else
                     {

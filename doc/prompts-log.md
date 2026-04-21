@@ -112,3 +112,100 @@ Prompt utilitzat: /opsx: Actua com un desenvolupador Senior Full-Stack especiali
 Resultat esperat: La creació completa del front-end a Unity utilitzant exclusivament UI Toolkit per al Login/Registre, i la generació del backend a Node.js estructurat com un microservei independent. El codi ha d'incloure el Patró Repository amb dues implementacions (Real amb SQL/Sequelize i InMemory per a tests), a més de la configuració de contenidors amb Docker Compose.
 
 Decisió Arquitectònica i Prevenció d'Errors: S'ha evitat l'antipatró d'encapsular Node.js i una base de dades SQL complexa en un únic contenidor Docker. En el seu lloc, s'ha optat per requerir un docker-compose.yml que orquestri els dos serveis per separat, respectant els estàndards de la indústria. A nivell de codi, per complir estrictament amb la rúbrica d'avaluació, s'ha exigit el desacoblament absolut de la lògica de negoci (Services), l'accés a dades (Repositories) i el routing (Controllers). El rol del servidor s'ha mantingut estrictament com a API REST HTTP, deixant la implementació de WebSockets per al futur microservei de partides.
+
+## Fase 4: Microservei de Matchmaking i Lobby (WebSockets)
+**Data:** 10 d'abril de 2026
+
+### Iteració 25: Implementació de Sales i Connexió WebSocket
+**Prompt utilitzat:** `/opsx: Actua com un desenvolupador Senior Full-Stack especialitzat en Unity i Node.js. He de crear el "Microservei de Matchmaking/Lobby"... [incloure aquí la resta del prompt d'adalt]`
+
+**Resultat esperat:** Un nou microservei en Node.js basat en el paquet `ws` per gestionar connexions en temps real, emmagatzemant l'estat de les sales en memòria. A la part de Unity, una interfície amb UI Toolkit per crear o unir-se a sales mitjançant un codi, i un sistema de comunicació asíncrona utilitzant `ClientWebSocket` i `ConcurrentQueue` per despatxar missatges al Main Thread de manera segura.
+
+**Decisió Arquitectònica / Disseny:** S'introdueix el rol de *Host*. El servidor actua únicament com a gestor de la sala i retransmissor de l'esdeveniment `START_GAME`. Quan el Host decideix començar, el servidor fa un *broadcast* a tots els clients connectats a aquella sala perquè carreguin l'escena del joc ("Cursa fins a la meta") simultàniament. Es respecta l'ús estricte de WebSockets natius exigit per l'especificació del projecte, descartant llibreries d'alt nivell com Socket.io per afavorir el rendiment i el compliment de la rúbrica.
+
+## Fase 5: Sincronització del Món i Inici de Partida
+**Data:** 14 d'abril de 2026
+
+### Iteració 26: Generació Procedimental Sincronitzada (Shared Seed)
+**Prompt utilitzat:** `/opsx: Actua com un desenvolupador Senior Full-Stack. Vull implementar la transició del Lobby al Joc Multijugador... [incloure la resta del prompt d'adalt]`
+
+**Resultat esperat:** Implementació de la "Seed" compartida des del servidor Node.js cap a Unity. Modificació del generador de nivells per ser determinista basat en aquesta seed. Transició automàtica d'escena per a tots els jugadors quan el Host prem el botó d'inici.
+
+**Decisió Tècnica:** S'ha optat per la generació determinista en lloc de la replicació d'objectes per xarxa. Això redueix dràsticament l'ús d'amplada de banda, ja que només cal enviar un número (`int`) per generar milers de plataformes de forma idèntica a cada client. S'utilitza 'Random.InitState()' a Unity per "segrestar" el motor aleatori i fer-lo previsible segons la seed del servidor.
+
+## Fase 7: HUD, Spectator Mode i Final de Partida
+**Data:** 15 d'abril de 2026
+
+### Iteració 28: Interfície Dinàmica i Sincronització de Resultats
+**Prompt utilitzat:** `/opsx: Actua com un desenvolupador Senior de Unity i Full-Stack. Necessito implementar la HUD i el sistema de fi de partida... [incloure la resta del prompt d'adalt]`
+
+**Resultat esperat:** Implementació de dues interfícies amb UI Toolkit (HUD de joc i Menú de Resultats). Sistema de rànquing en temps real basat en la posició X dels jugadors. Lògica de transició a mode espectador i enviament d'estadístiques finals al servidor Node.js per a la seva persistència en la BBDD (mitjançant el microservei d'usuaris/resultats).
+
+**Decisió Tècnica:** El càlcul del rànquing es realitza de manera descentralitzada (cada client ho calcula) per estalviar missatges de xarxa, ja que les posicions X ja se sincronitzen mitjançant el World State. El mode espectador es gestiona reassignant el 'target' de la càmera al següent 'NetworkPlayer' actiu. La persistència final dels resultats es delega al servidor per garantir que ningú pugui falsejar la seva puntuació localment.
+
+## Fase 7.3: Optimización del Modo Espectador y Limpieza de UI
+**Data:** 20 d'abril de 2026
+
+## Fase 7.1: Refinament de la HUD i Transició de Meta
+**Data:** 15 d'abril de 2026
+
+### Iteració 29: Ocultació Dinàmica de la Interfície
+**Prompt utilitzat:** `/opsx: Actua com un desenvolupador Senior de Unity i Full-Stack. Necessito implementar la HUD... [incloure el prompt d'adalt amb l'afegit de l'ocultació]`
+
+**Resultat esperat:** Implementació de la HUD amb UI Toolkit que inclou la lògica per desactivar la seva visibilitat (`VisualElement.style.display = DisplayStyle.None`) immediatament després que el jugador creui la línia de meta. 
+
+**Decisió Tècnica:** S'ha decidit automatitzar l'ocultació de la HUD de carrera per netejar l'espai visual durant el mode espectador. Això evita distraccions (com el cronòmetre personal o el rànquing local) mentre s'espera que la resta de participants finalitzin la partida.
+
+### Iteració 30: Redisseny Estètic (Minimalisme i Transicions USS)
+**Prompt utilitzat:** `/opsx: Actua com un desenvolupador Senior de Unity especialitzat en UI Toolkit i UX/UI Design. El meu joc de curses multijugador ja funciona, però necessito redissenyar l'estètica... [incloure la resta del prompt d'adalt]`
+
+**Resultat esperat:** Fitxers `.uxml` i `.uss` completament reescrits per abandonar els fons sòlids i llistes clàssiques. Ús avançat de `transition` en USS per crear feedback visual (desplaçaments suaus al rànquing, efectes hover orgànics i animacions d'aparició).
+
+**Decisió de Disseny:** S'aposta per un "Game Feel" premium als menús. S'ha exigit a la IA que no utilitzi taules HTML/XML tradicionals, sinó flexbox avançat amb posicions relatives/absolutes per aconseguir un rànquing (Leaderboard) dinàmic i un podi final geomètric. Això demostra un domini superior de les eines de Unity (UI Toolkit) per a l'avaluació final.
+
+### Iteració 31: Navegació d'Espectador i Estats Excloents
+**Prompt utilitzat:** `/opsx: Actua com un desenvolupador Senior de Unity. Necessito solucionar problemes de solapament de UI... [incloure la resta del prompt]`
+
+**Resultat esperat:** Un sistema de càmera que permet rotar entre jugadors actius mitjançant fletxes en una UI d'espectador reduïda. Correcció de l'error visual on la HUD de carrera i els resultats se sobreposaven, assegurant que cada fase del joc té la seva pròpia interfície neta.
+
+**Decisió Tècnica:** S'ha implementat un "UI Manager" amb estats definits (CARRERA, ESPECTADOR, RESULTATS). En passar d'un estat a un altre, s'aplica 'display: none' a la resta de contenidors de l'UI Toolkit. La lògica d'espectador ara filtra la llista de jugadors per ignorar aquells que ja han finalitzat, permetent una navegació útil entre els que segueixen competint.
+
+## Fase 7.4: Propagació d'Identitat i Noms de Usuari Reals
+**Data:** 20 d'abril de 2026
+
+### Iteració 32: Substitució de Placeholders per Noms de BBDD
+**Prompt utilitzat:** `/opsx: Actua com un desenvolupador Senior Full-Stack. Necessito arreglar el sistema de noms de usuari... [incloure la resta del prompt]`
+
+**Resultat esperat:** Sincronització completa de la identitat del jugador. El nom triat en el registre/login viatja a través del servidor de WebSockets i s'assigna correctament a les etiquetes de la interfície de tots els clients, eliminant els noms genèrics com "Jugador_6042".
+
+**Decisió Tècnica:** S'ha establert un sistema de persistència local temporal (`PlayerData` static class) per emmagatzemar el nom de l'usuari després de l'autenticació HTTP. Aquesta dada es transmet en el moment del 'handshake' del WebSocket (`JOIN_ROOM`), permetent que el servidor Node.js associï cada connexió amb una identitat real abans de començar la partida.
+
+## Fase 7.5: Resolució de Bugs de UI (Duplicitat de Jugadors)
+**Data:** 20 d'abril de 2026
+
+### Iteració 33: Correcció del Scoreboard i Sincronització d'IDs
+**Prompt utilitzat:** `/opsx: Actua com un desenvolupador Senior de Unity i Full-Stack. Necessito arreglar un bug a la meva 'GameHUD'... [incloure resta del prompt]`
+
+**Resultat esperat:** Un Scoreboard estable que només mostri exactament el nombre de jugadors actius a la sala, sense duplicar el jugador local ni acumular files residuals a l'UI Toolkit.
+
+**Decisió Tècnica i Correcció:** S'ha migrat o reforçat l'ús d'estructures de dades basades en Diccionaris (`Dictionary<string, Player>`) tant a Unity com a Node.js per garantir l'exclusivitat dels jugadors mitjançant la seva ID única. A nivell visual, s'ha aplicat el mètode `Clear()` al contenidor de la UI abans de repintar el rànquing, solucionant l'efecte "fantasma" de les dades duplicades.
+
+## Fase 8: Auditoria de Projecte i Control de Requisits
+**Data:** 21 d'abril de 2026
+
+### Iteració 34: Generació de Checklist contra la Rúbrica
+**Prompt utilitzat:** `/opsx: Actua com un Tech Lead i Project Manager. Analitza l'estat actual del meu espai de treball i compara'l amb l'enunciat del projecte... [incloure la resta del prompt]`
+
+**Resultat esperat:** Una llista de comprovació exhaustiva generada per la IA que contrasti el codi existent amb els requisits formals del document (Backend, Frontend, Infraestructura, i Metodologia OpenSpec). 
+
+**Decisió Tècnica i Metodològica:** Arribats a aquest punt de complexitat, s'utilitza l'agent d'IA no per generar codi, sinó com a eina d'auditoria i gestió de projectes. Això permet identificar de forma objectiva deutes tècnics (com l'absència del proxy invers o possibles mancances en la documentació de traçabilitat) abans de preparar els entregables finals i la presentació de 10 minuts.
+
+## Fase 9: Integració d'Intel·ligència Artificial (ML-Agents)
+**Data:** 21 d'abril de 2026
+
+### Iteració 35: Desenvolupament del Bot Autònom
+**Prompt utilitzat:** `/opsx: Actua com un expert en Intel·ligència Artificial i Unity ML-Agents. Necessito implementar un bot ('Agent') per al meu joc... [incloure la resta del prompt]`
+
+**Resultat esperat:** Creació de l'script `BotRacingAgent.cs` per enllaçar les mecàniques de moviment del jugador amb el sistema de decisions de ML-Agents. Configuració de l'entorn d'observació mitjançant `RayPerceptionSensor2D` i generació de l'arxiu de configuració `.yaml` per a l'entrenament amb Python.
+
+**Decisió Tècnica i Metodològica:** Conscient de la complexitat d'entrenar xarxes neuronals en entorns de plataformes procedimentals, s'ha optat per un disseny d'agent basat en recompenses simples (avançar cap a la dreta) i visió local (Raycasts). Aquesta decisió acota l'abast de l'entrenament, permetent complir amb el requisit tècnic de la rúbrica sense bloquejar el desenvolupament de la resta de l'arquitectura.

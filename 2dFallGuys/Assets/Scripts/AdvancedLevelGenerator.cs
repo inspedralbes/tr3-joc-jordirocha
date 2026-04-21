@@ -102,8 +102,8 @@ public class AdvancedLevelGenerator : MonoBehaviour
     [SerializeField] private Vector2 posicioInicial = new Vector2(0f, 0f);
 
     [Header("Referència del Jugador")]
-    [Tooltip("El Transform del jugador per col·locar-lo a l'inici del nivell.")]
-    public Transform jugador;
+    [Tooltip("El Prefab del jugador que s'instanciarà a l'inici del nivell per a cada client.")]
+    public GameObject prefabJugador;
 
     // =========================================================
     // SECCIÓ 2c: COMPTADOR PÚBLIC DE TRAMPES
@@ -145,6 +145,17 @@ public class AdvancedLevelGenerator : MonoBehaviour
         // Calculem la gravetat real que aplica Unity al Rigidbody2D del jugador.
         // Physics2D.gravity.y és negatiu per defecte (-9.81).
         gravetatReal = Physics2D.gravity.y * escalaGravetat;
+
+        // Comprovem si venim del Lobby amb una seed designada pèl servidor
+        if (LobbyNetworkManager.roomSeed != 0)
+        {
+            Debug.Log($"[AdvancedLevelGenerator] Inicialitzant el mapa sincronitzat amb la seed de la sala: {LobbyNetworkManager.roomSeed}");
+            Random.InitState(LobbyNetworkManager.roomSeed);
+        }
+        else
+        {
+            Debug.Log("[AdvancedLevelGenerator] Cap seed detectada. Jugant mode offline amb seed aleatori.");
+        }
 
         // Validació: els tres prefabs de plataforma són obligatoris.
         if (prefabPlatEsquerra == null || prefabPlatMig == null || prefabPlatDreta == null)
@@ -324,23 +335,48 @@ public class AdvancedLevelGenerator : MonoBehaviour
         Debug.Log($"[AdvancedLevelGenerator] Nivell generat! " +
                   $"{nombreDePlataformes} plataformes | " +
                   $"{totalTrampesNivell} trampes instanciades sobre les plataformes.");
-        // --- PAS 8: COL·LOCAR EL JUGADOR ---
-        if (jugador != null)
-        {
-            // El posem a la posició inicial de la primera plataforma, però una mica més amunt (ex: +2 en Y) 
-            // perquè caigui suaument sobre el terra i no quedi encallat a dins del Collider.
-            Vector2 posJugadorInicial = new Vector2(posicioInicial.x, posicioInicial.y + 2f);
-            jugador.position = posJugadorInicial;
-            
-            // Actualitzem el lloc de reaparició per defecte a la zona de l'inici
-            DeathZone.posicioReaparicioActiva = posJugadorInicial;
+        // --- PAS 8: INSTANCIAR ELS JUGADORS ---
+        Vector2 posJugadorInicial = new Vector2(posicioInicial.x, posicioInicial.y + 2f);
+        
+        // Actualitzem el lloc de reaparició per defecte a la zona de l'inici
+        DeathZone.posicioReaparicioActiva = posJugadorInicial;
 
-            // Opcional: Si el jugador estava caient a l'editor, li reiniciem la velocitat
-            Rigidbody2D rbJugador = jugador.GetComponent<Rigidbody2D>();
-            if (rbJugador != null)
+        if (prefabJugador != null)
+        {
+            if (LobbyNetworkManager.roomPlayers != null && LobbyNetworkManager.roomPlayers.Length > 0)
             {
-                rbJugador.linearVelocity = Vector2.zero;
+                // Mode Multijugador: Instanciem un jugador per cada registre en la llista rebuda del servidor
+                for (int p = 0; p < LobbyNetworkManager.roomPlayers.Length; p++)
+                {
+                    // Desplacem una mica cada jugador per a evitar superposicions
+                    Vector2 posicioSpawn = new Vector2(posJugadorInicial.x + (p * 0.5f), posJugadorInicial.y);
+                    GameObject nouJugador = Instantiate(prefabJugador, posicioSpawn, Quaternion.identity);
+                    nouJugador.name = $"Jugador_{LobbyNetworkManager.roomPlayers[p].name}";
+
+                    // [AFEGIT PELA SINCRONITZACIÓ DE POSICIO]
+                    PlayerNetworkSync syncScript = nouJugador.GetComponent<PlayerNetworkSync>();
+                    if (syncScript == null) syncScript = nouJugador.AddComponent<PlayerNetworkSync>();
+                    
+                    syncScript.networkId = LobbyNetworkManager.roomPlayers[p].id;
+                    syncScript.isLocalPlayer = (syncScript.networkId == LobbyNetworkManager.localPlayerId);
+                    
+                    if (LobbyNetworkManager.Instance != null)
+                    {
+                        syncScript.roomCode = LobbyNetworkManager.Instance.CurrentRoomCode;
+                        LobbyNetworkManager.Instance.RegisterPlayer(syncScript.networkId, syncScript);
+                    }
+                }
             }
+            else
+            {
+                // Mode Offline / Editor (si premem 'Play' directament en l'escena)
+                GameObject nouJugador = Instantiate(prefabJugador, posJugadorInicial, Quaternion.identity);
+                nouJugador.name = "Jugador_Local_Offline";
+            }
+        }
+        else
+        {
+            Debug.LogError("[AdvancedLevelGenerator] Manca el prefabJugador per instanciar els participants. Assigna'l a l'Inspector!");
         }
         
     }

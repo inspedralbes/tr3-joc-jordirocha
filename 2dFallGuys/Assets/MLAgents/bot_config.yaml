@@ -1,0 +1,31 @@
+behaviors:
+  BotRacingAgent:
+    trainer_type: ppo
+    hyperparameters:
+      batch_size: 128
+      buffer_size: 2048
+      learning_rate: 0.0003
+      beta: 0.01          # Manté certa entropia per fomentar l'exploració de salts
+      epsilon: 0.2        # Retall per mantenir l'entrenament estable
+      lambd: 0.95         # Pes de les recompenses futures respecte les actuals
+      num_epoch: 3
+      learning_rate_schedule: linear
+    network_settings:
+      normalize: true     # Imprescindible quan mesurem distàncies i velocitats variables
+      hidden_units: 256   # Xarxa densa per detectar bé els forats del Raycast
+      num_layers: 2
+      vis_encode_type: simple
+    reward_signals:
+      extrinsic:
+        gamma: 0.99
+        strength: 1.0
+      # Modul de Curiosity per incentivar l'agent a descobrir el mapa (ideal per plataformes!)
+      curiosity:
+        gamma: 0.99
+        strength: 0.05
+        network_settings:
+          hidden_units: 128
+        learning_rate: 0.0003
+    max_steps: 2000000     # L'entrenament finalitzarà en 2 milions de passos
+    time_horizon: 64       # Quants passos endavant avalua abans d'afegir al buffer
+    summary_freq: 20000    # Guardarà estadístiques cada 20.000 passos al TensorBoard

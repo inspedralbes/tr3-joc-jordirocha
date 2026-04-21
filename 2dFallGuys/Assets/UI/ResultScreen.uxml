@@ -1,0 +1,23 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="GameHUD.uss" />
+    <ui:VisualElement name="ResultContainer" class="result-backdrop" style="display: none;">
+        
+        <ui:VisualElement name="ResultBox" class="result-box">
+            <ui:Label text="RESULTATS" class="result-title" />
+            
+            <!-- Podi visual per al 2n, 1r, 3r usant columnes orgàniques -->
+            <ui:VisualElement name="PodiumContainer" class="podium-geometric-container">
+                <ui:VisualElement name="Pos2" class="podpos podpos-2"><ui:Label name="Lbl2" class="pod-lbl" /><ui:VisualElement class="pod-bar pod-bar-2"/></ui:VisualElement>
+                <ui:VisualElement name="Pos1" class="podpos podpos-1"><ui:Label name="Lbl1" class="pod-lbl" /><ui:VisualElement class="pod-bar pod-bar-1"/></ui:VisualElement>
+                <ui:VisualElement name="Pos3" class="podpos podpos-3"><ui:Label name="Lbl3" class="pod-lbl" /><ui:VisualElement class="pod-bar pod-bar-3"/></ui:VisualElement>
+            </ui:VisualElement>
+
+            <!-- Llista per la resta de jugadors -->
+            <ui:ScrollView name="OthersList" class="others-list">
+            </ui:ScrollView>
+            
+            <ui:Button name="BtnTornarLobby" text="TORNAR AL LOBBY" class="btn-tornar" />
+        </ui:VisualElement>
+        
+    </ui:VisualElement>
+</ui:UXML>
