@@ -1,0 +1,38 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="GameHUD.uss" />
+    <ui:VisualElement name="HUDContainer" class="hud-container">
+        
+        <ui:VisualElement name="MainHUDContent" class="main-hud-content">
+            <!-- Contenidor Lateral Esquerre per estadístiques sense caixa massissa -->
+            <ui:VisualElement class="stats-zone">
+            <!-- Temps -->
+            <ui:VisualElement class="kpi-container">
+                <ui:Label name="LblTemps" text="0.0" class="kpi-timer-text" />
+                <ui:Label text="s" class="kpi-timer-unit" />
+            </ui:VisualElement>
+            
+            <!-- Monedes -->
+            <ui:VisualElement class="kpi-container coins-container">
+                <ui:Label text="❂" class="kpi-coin-icon"/>
+                <ui:Label name="LblMonedes" text="0" class="kpi-coins-text" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        
+        <!-- Panell de Líderes flotant animat -->
+        <ui:VisualElement class="leaderboard-wrapper">
+            <ui:VisualElement name="LeaderboardDynamicContainer" class="leaderboard-dynamic-container">
+                <!-- Les posicions s'afegiran en C# i s'animaran mitjançant 'top' i transicions USS -->
+            </ui:VisualElement>
+        </ui:VisualElement>
+        
+        </ui:VisualElement> <!-- Tanca MainHUDContent -->
+
+        <!-- Contenidor per al Mode Espectador -->
+        <ui:VisualElement name="SpectatorContainer" class="spectator-container" style="display: none;">
+            <ui:Button name="BtnSpectatorPrev" text="&lt;" class="spectator-btn" />
+            <ui:Label text="👀 ESPECTANT" class="spectator-text" />
+            <ui:Button name="BtnSpectatorNext" text="&gt;" class="spectator-btn" />
+        </ui:VisualElement>
+        
+    </ui:VisualElement>
+</ui:UXML>

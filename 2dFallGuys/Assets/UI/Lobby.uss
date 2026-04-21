@@ -1,0 +1,162 @@
+.main-container {
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(30, 30, 30, 0.95);
+    width: 100%;
+    height: 100%;
+}
+
+.screen-container {
+    width: 450px;
+    background-color: rgb(45, 45, 48);
+    border-radius: 15px;
+    padding: 30px;
+    border-width: 2px;
+    border-color: rgb(60, 60, 65);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.title-label {
+    font-size: 28px;
+    -unity-font-style: bold;
+    color: rgb(240, 240, 240);
+    -unity-text-align: middle-center;
+    margin-bottom: 25px;
+}
+
+.subtitle-label {
+    font-size: 22px;
+    -unity-font-style: bold;
+    color: rgb(255, 204, 0); /* Color taronja/groc llampant pel codi */
+    -unity-text-align: middle-center;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+.input-label {
+    font-size: 14px;
+    color: rgb(200, 200, 200);
+    margin-bottom: 5px;
+}
+
+.input-field {
+    margin-bottom: 15px;
+}
+
+.input-field > .unity-text-field__input {
+    height: 40px;
+    font-size: 18px;
+    border-radius: 8px;
+    background-color: rgb(20, 20, 20);
+    color: white;
+    padding-left: 10px;
+    -unity-text-align: middle-left;
+    border-width: 1px;
+    border-color: rgb(70, 70, 75);
+}
+
+.primary-button {
+    height: 50px;
+    font-size: 18px;
+    -unity-font-style: bold;
+    background-color: rgb(0, 122, 204);
+    color: white;
+    border-radius: 10px;
+    border-width: 0;
+    transition-duration: 0.2s;
+}
+
+.primary-button:hover {
+    background-color: rgb(0, 150, 255);
+    scale: 1.02;
+}
+
+.secondary-button {
+    height: 45px;
+    font-size: 16px;
+    -unity-font-style: bold;
+    background-color: rgb(70, 70, 75);
+    color: white;
+    border-radius: 10px;
+    border-width: 0;
+    transition-duration: 0.2s;
+}
+
+.secondary-button:hover {
+    background-color: rgb(90, 90, 95);
+    scale: 1.02;
+}
+
+.danger-button {
+    height: 40px;
+    font-size: 16px;
+    background-color: rgb(200, 50, 50);
+    color: white;
+    border-radius: 8px;
+    border-width: 0;
+    margin-top: 20px;
+    transition-duration: 0.2s;
+}
+
+.danger-button:hover {
+    background-color: rgb(230, 80, 80);
+}
+
+.start-button {
+    background-color: rgb(40, 167, 69); /* Verd per l'inici */
+    margin-top: 20px;
+}
+.start-button:hover {
+    background-color: rgb(50, 190, 80);
+}
+
+
+.divider {
+    height: 30px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    align-items: center;
+    justify-content: center;
+}
+
+.divider-text {
+    font-size: 12px;
+    color: rgb(150, 150, 150);
+}
+
+.status-message {
+    color: rgb(255, 100, 100);
+    font-size: 14px;
+    -unity-text-align: middle-center;
+    margin-top: 15px;
+    white-space: normal;
+}
+
+.list-title {
+    font-size: 16px;
+    color: rgb(200, 200, 200);
+    margin-bottom: 10px;
+}
+
+.players-list-container {
+    height: 200px;
+    background-color: rgb(30, 30, 30);
+    border-radius: 8px;
+    padding: 10px;
+    border-width: 1px;
+    border-color: rgb(50, 50, 50);
+}
+
+/* Es generarà des de codi */
+.player-item {
+    font-size: 16px;
+    color: white;
+    padding: 8px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(60, 60, 60);
+}

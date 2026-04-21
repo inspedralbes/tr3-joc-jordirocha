@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_db_users
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: gameserver
+      MYSQL_USER: joc_user
+      MYSQL_PASSWORD: joc_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+
+  users-api:
+    build:
+      # Apunta cap al directori del microservei
+      context: ./backend/users-microservice
+    container_name: users_microservice
+    restart: always
+    environment:
+      - PORT=3000
+      # Substitueix al server.js enviant aquesta info al db local (veure depends on i host 'db')
+      - DATABASE_URL=mysql://joc_user:joc_pass@db:3306/gameserver
+      - JWT_SECRET=clauSuperSecretaJocMultijugador123
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+
+  matchmaking-service:
+    build:
+      context: ./backend/matchmaking-microservice
+    container_name: matchmaking_microservice
+    restart: always
+    environment:
+      - PORT=8080
+      - JWT_SECRET=clauSuperSecretaJocMultijugador123
+    ports:
+      - "8080:8080"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin_gameserver
+    restart: always
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: rootpassword
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx_proxy
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - users-api
+      - matchmaking-service
+
+volumes:
+  mysqldata:

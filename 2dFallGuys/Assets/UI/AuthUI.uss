@@ -1,0 +1,79 @@
+.container-main {
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(20, 20, 20, 0.95);
+}
+
+.panel {
+    width: 400px;
+    background-color: rgb(45, 45, 45);
+    border-radius: 15px;
+    padding: 30px;
+    border-color: rgb(75, 75, 75);
+    border-width: 2px;
+}
+
+.hidden {
+    display: none;
+}
+
+.title {
+    font-size: 24px;
+    -unity-font-style: bold;
+    color: rgb(240, 240, 240);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.unity-text-field {
+    margin-bottom: 15px;
+}
+
+.unity-text-field__label {
+    color: rgb(200, 200, 200);
+    width: 120px;
+}
+
+.unity-text-field__input {
+    background-color: rgb(30, 30, 30);
+    color: white;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: rgb(60, 60, 60);
+    padding: 5px;
+}
+
+.btn-primary {
+    background-color: rgb(40, 150, 255);
+    color: white;
+    font-size: 16px;
+    -unity-font-style: bold;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 10px;
+    border-width: 0;
+}
+
+.btn-primary:hover {
+    background-color: rgb(60, 170, 255);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: rgb(150, 150, 150);
+    font-size: 14px;
+    margin-top: 10px;
+    border-width: 0;
+}
+
+.btn-secondary:hover {
+    color: white;
+}
+
+.error-msg {
+    color: rgb(255, 100, 100);
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    display: none;
+}

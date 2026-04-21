@@ -1,0 +1,44 @@
+# ========================================== #
+#           REGLAS PARA EL BACKEND           #
+# ========================================== #
+backend/node_modules/
+backend/.env
+backend/dist/
+backend/build/
+backend/*.log
+backend/.vscode/
+
+# ========================================== #
+#           REGLAS PARA UNITY (2dFallGuys)   #
+# ========================================== #
+# Es vital que el nombre coincida con tu carpeta: 2dFallGuys
+
+2dFallGuys/[Ll]ibrary/
+2dFallGuys/[Tt]emp/
+2dFallGuys/[Oo]bj/
+2dFallGuys/[Bb]uild/
+2dFallGuys/[Bb]uilds/
+2dFallGuys/[Ll]ogs/
+2dFallGuys/[Uu]ser[Ss]ettings/
+2dFallGuys/[Mm]emoryCaptures/
+2dFallGuys/[Rr]ecordings/
+2dFallGuys/.utmp/
+
+# Archivos de solución de VS/Rider dentro de Unity
+2dFallGuys/*.csproj
+2dFallGuys/*.sln
+2dFallGuys/*.user
+2dFallGuys/*.userprefs
+2dFallGuys/*.unitypackage
+
+# ========================================== #
+#           REGLAS GENERALES Y DOCKER        #
+# ========================================== #
+.DS_Store
+.vs/
+.idea/
+*.tmp
+*.swp
+
+# Docker
+.docker/

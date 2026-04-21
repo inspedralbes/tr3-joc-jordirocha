@@ -1,0 +1,117 @@
+/* ResultScreen.uss - Estils pel Podi i la Pantalla de Resultats */
+
+.result-screen-container {
+    flex-grow: 1;
+    background-color: rgba(15, 15, 25, 0.95);
+    align-items: center;
+    justify-content: center;
+    transition-property: opacity;
+    transition-duration: 0.6s;
+    transition-timing-function: ease-in-out;
+}
+
+/* Títol principal */
+.result-title {
+    font-size: 60px;
+    color: white;
+    -unity-font-style: bold;
+    margin-bottom: 40px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    transition-property: translate;
+    transition-duration: 0.5s;
+    transition-timing-function: ease-out;
+}
+
+/* Contenidor del Podi Geomètric */
+.podium-container {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: center;
+    height: 350px;
+    margin-bottom: 50px;
+}
+
+/* Pilar genèric del podi */
+.podium-pillar {
+    width: 140px;
+    margin: 0 15px;
+    align-items: center;
+    justify-content: flex-start;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    background-color: #3a3a4c;
+    /* Animació suau de transició d'altura a l'entrar */
+    transition-property: height, background-color, scale;
+    transition-duration: 1s, 0.3s, 0.3s;
+    transition-timing-function: ease-out, ease-in-out, ease-in-out;
+}
+
+.podium-pillar:hover {
+    scale: 1.02;
+    background-color: #4b4b5e;
+}
+
+/* Altures específiques i colors (Or, Plata, Bronze) */
+.podium-1st {
+    height: 300px;
+    background-color: #f1c40f; /* Or */
+}
+
+.podium-2nd {
+    height: 220px;
+    background-color: #bdc3c7; /* Plata */
+}
+
+.podium-3rd {
+    height: 150px;
+    background-color: #cd7f32; /* Bronze */
+}
+
+/* Noms dels jugadors a sobre del podi */
+.podium-player-name {
+    margin-top: -40px;
+    font-size: 24px;
+    color: white;
+    -unity-font-style: bold;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+/* Posició (1, 2, 3) dins del pilar */
+.podium-rank {
+    margin-top: 20px;
+    font-size: 40px;
+    color: rgba(0, 0, 0, 0.4);
+    -unity-font-style: bold;
+}
+
+/* Botó de tornar al Lobby */
+.btn-return-lobby {
+    padding: 15px 50px;
+    font-size: 22px;
+    color: white;
+    background-color: #e74c3c;
+    border-width: 0;
+    border-radius: 10px;
+    transition-property: scale, background-color;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
+}
+
+.btn-return-lobby:hover {
+    scale: 1.05;
+    background-color: #ff5e4d;
+}
+
+.btn-return-lobby:active {
+    scale: 0.95;
+    background-color: #c0392b;
+}
+
+/* Estats d'animació inicial (per transicions a l'aparèixer) */
+.hidden-enter {
+    opacity: 0;
+}
+
+.podium-enter .podium-pillar {
+    height: 0px;
+}

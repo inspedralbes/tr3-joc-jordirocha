@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd"
+>
+    <!-- Incloure el full d'estils -->
+    <ui:Style src="Lobby.uss" />
+
+    <ui:VisualElement name="MainContainer" class="main-container">
+        <!-- Pantalla de Crear / Unir-se a Sala -->
+        <ui:VisualElement name="JoinScreen" class="screen-container">
+            <ui:Label text="Lobby Multijugador" class="title-label" />
+            
+            <ui:Button name="BtnCreateRoom" text="Crear Nova Sala" class="primary-button" />
+
+            <ui:VisualElement class="divider">
+                <ui:Label text="O UNIR-SE A UNA SALA" class="divider-text" />
+            </ui:VisualElement>
+
+            <ui:VisualElement class="input-group">
+                <ui:Label text="Codi de sala:" class="input-label" />
+                <ui:TextField name="InputRoomCode" class="input-field" />
+            </ui:VisualElement>
+
+            <ui:Button name="BtnJoinRoom" text="Unir-se a la Sala" class="secondary-button" />
+            
+            <ui:Label name="LblStatusMessage" class="status-message" text="" />
+        </ui:VisualElement>
+
+
+        <!-- Pantalla de dins de la Sala -->
+        <ui:VisualElement name="RoomScreen" class="screen-container" style="display: none;">
+            <ui:Label text="Dins de la Sala" class="title-label" />
+            <ui:Label name="LblCurrentRoomCode" text="Codi: -" class="subtitle-label" />
+
+            <ui:Label text="Jugadors actius:" class="list-title" />
+            
+            <!-- Contenidor de players -->
+            <ui:ScrollView name="PlayersList" class="players-list-container">
+                <!-- Els jugadors s'afegiran aquí des del codi C# -->
+            </ui:ScrollView>
+
+            <ui:Button name="BtnStartGame" text="Iniciar Partida" class="primary-button start-button" style="display: none;" />
+            <ui:Button name="BtnLeaveRoom" text="Sortir de la Sala" class="danger-button" />
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+
+</ui:UXML>

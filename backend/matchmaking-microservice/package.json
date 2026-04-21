@@ -1,0 +1,14 @@
+{
+  "name": "matchmaking-microservice",
+  "version": "1.0.0",
+  "description": "Microservei de Matchmaking amb WebSockets natius",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^9.0.3",
+    "ws": "^8.16.0"
+  }
+}

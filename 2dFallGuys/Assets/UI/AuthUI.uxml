@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xsi:noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd"
+>
+    <!-- Incloure referència a fulla d'estils -->
+    <ui:Style src="AuthUI.uss" />
+
+    <ui:VisualElement class="container-main">
+        
+        <!-- PANELL DE LOGIN -->
+        <ui:VisualElement name="LoginPanel" class="panel">
+            <ui:Label text="Iniciar Sessió" class="title" />
+            
+            <ui:TextField name="LoginUsername" label="Nom d'Usuari:" />
+            <ui:TextField name="LoginPassword" label="Contrasenya:" password="true" />
+            
+            <ui:Label name="LoginError" class="error-msg" text="" />
+            
+            <ui:Button name="BtnLogin" text="Entra" class="btn-primary" />
+            <ui:Button name="BtnGoRegister" text="No tens compte? Registra't" class="btn-secondary" />
+        </ui:VisualElement>
+
+        <!-- PANELL DE REGISTRE (A la classe d'estils .hidden l'ocultarem base en visualitzar el login) -->
+        <ui:VisualElement name="RegisterPanel" class="panel hidden">
+            <ui:Label text="Crea un nou compte" class="title" />
+            
+            <ui:TextField name="RegUsername" label="Nom d'Usuari:" />
+            <ui:TextField name="RegEmail" label="Email:" />
+            <ui:TextField name="RegPassword" label="Contrasenya:" password="true" />
+            
+            <ui:Label name="RegisterError" class="error-msg" text="" />
+            
+            <ui:Button name="BtnRegister" text="Desa el registre" class="btn-primary" />
+            <ui:Button name="BtnGoLogin" text="Ja tinc compte, tornar al Login" class="btn-secondary" />
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+</ui:UXML>
